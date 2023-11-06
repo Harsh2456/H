@@ -1,0 +1,56 @@
+from collections import deque
+
+class Graph:
+    def __init__(self):
+        self.graph = {}
+
+    def add_edge(self, u, v):
+        if u not in self.graph:
+            self.graph[u] = []
+        if v not in self.graph:
+            self.graph[v] = []
+        self.graph[u].append(v)
+        self.graph[v].append(u)
+
+    def dfs(self, vertex, visited):
+        visited.add(vertex)
+        print(vertex, end=' ')
+
+        for neighbor in self.graph[vertex]:
+            if neighbor not in visited:
+                self.dfs(neighbor, visited)
+
+    def depth_first_search(self, start_vertex):
+        visited = set()
+        self.dfs(start_vertex, visited)
+
+    def breadth_first_search(self, start_vertex):
+        visited = set()
+        queue = deque()
+        queue.append(start_vertex)
+        visited.add(start_vertex)
+
+        while queue:
+            vertex = queue.popleft()
+            print(vertex, end=' ')
+
+            for neighbor in self.graph[vertex]:
+                if neighbor not in visited:
+                    queue.append(neighbor)
+                    visited.add(neighbor)
+
+# Create a graph and add edges based on user input
+graph = Graph()
+num_edges = int(input("Enter the number of edges: "))
+
+for _ in range(num_edges):
+    u, v = map(int, input("Enter an edge (u v): ").split())
+    graph.add_edge(u, v)
+
+start_vertex = int(input("Enter the starting vertex for DFS and BFS: "))
+
+print("DFS traversal:")
+graph.depth_first_search(start_vertex)
+
+print("\nBFS traversal:")
+graph.breadth_first_search(start_vertex)
